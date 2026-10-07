@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>怎麼賣？</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
+<script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3/dist/index.js"></script>
+<style>
+:root{
+  --bg:#f6f3ee; --card:#ffffff; --ink:#26221d; --muted:#7a7268; --line:#e4ddd2;
+  --accent:#d6452f; --accent-ink:#fff; --accent-soft:#fbe6e1;
+  --blue:#2f6fd6; --blue-soft:#e3edfb; --green:#2e8b57; --green-soft:#e2f3e9;
+  --hot:rgba(214,69,47,.10); --hot-line:rgba(214,69,47,.85);
+  --shadow:0 6px 24px rgba(40,30,20,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1916; --card:#262320; --ink:#f1ece4; --muted:#a69d91; --line:#3a352f;
+    --accent:#f0644c; --accent-ink:#1b1916; --accent-soft:#3c2620;
+    --blue:#7aa7f0; --blue-soft:#1f2a3c; --green:#62c28d; --green-soft:#1d3127;
+    --hot:rgba(240,100,76,.14); --hot-line:rgba(240,100,76,.9);
+    --shadow:0 6px 24px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1916; --card:#262320; --ink:#f1ece4; --muted:#a69d91; --line:#3a352f;
+  --accent:#f0644c; --accent-ink:#1b1916; --accent-soft:#3c2620;
+  --blue:#7aa7f0; --blue-soft:#1f2a3c; --green:#62c28d; --green-soft:#1d3127;
+  --hot:rgba(240,100,76,.14); --hot-line:rgba(240,100,76,.9);
+  --shadow:0 6px 24px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"PingFang TC","PingFang SC","Noto Sans TC","Noto Sans SC","Microsoft JhengHei","Microsoft YaHei",system-ui,sans-serif;line-height:1.5;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:960px;margin:0 auto;padding:12px 16px 24px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:6px 0 10px}
+h1{margin:0;font-size:30px;letter-spacing:.04em}
+h1 span{color:var(--accent)}
+.seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;padding:6px 16px;border-radius:999px;font-size:16px}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.hint{color:var(--muted);font-size:14px;margin:0 0 10px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.nav{display:flex;align-items:center;gap:8px}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 14px;font-size:16px;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.big{padding:10px 20px;font-size:18px}
+.btn.small{padding:6px 10px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:default}
+.count{min-width:70px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
+.tools{display:flex;gap:6px;flex-wrap:wrap}
+.stage-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:var(--shadow)}
+.stage{position:relative;margin:0 auto;width:fit-content;max-width:100%;user-select:none;-webkit-user-select:none}
+.stage img{display:block;max-width:100%;max-height:72vh;border-radius:8px}
+.hot{position:absolute;border:2px dashed var(--hot-line);background:var(--hot);border-radius:8px;cursor:pointer;padding:0;transition:background .15s}
+.hot:hover,.hot:focus-visible{background:rgba(214,69,47,.22);outline:none}
+.hot.whole{border-color:transparent;background:transparent}
+.hot.whole:hover{background:rgba(214,69,47,.06)}
+.empty{padding:60px 20px;text-align:center;color:var(--muted)}
+footer{text-align:center;font-size:12px;color:var(--muted);padding:18px 0 22px}
+/* popup */
+.overlay{position:fixed;inset:0;background:rgba(20,15,10,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.overlay.show{display:flex}
+.pop{background:var(--card);border-radius:20px;box-shadow:var(--shadow);width:min(440px,100%);padding:22px 20px 20px;position:relative;max-height:92vh;overflow:auto}
+.x{position:absolute;right:10px;top:8px;border:0;background:transparent;font-size:24px;color:var(--muted);padding:4px 10px}
+.pname{font-size:15px;color:var(--muted);margin:0 0 4px}
+.q{display:flex;align-items:center;gap:10px;background:var(--blue-soft);border-radius:14px;padding:12px 14px;margin:0 0 14px}
+.q .txt{font-size:28px;font-weight:700;flex:1}
+.spk{border:0;background:transparent;font-size:24px;padding:2px 6px;border-radius:8px}
+.spk:hover{background:rgba(0,0,0,.06)}
+.ans{background:var(--green-soft);border-radius:14px;padding:12px 14px;margin-top:14px;display:none}
+.ans.show{display:block}
+.ans .row{display:flex;align-items:flex-start;gap:10px}
+.ans .txt{flex:1;font-size:26px;font-weight:700;line-height:2.1}
+ruby{ruby-position:over}
+rt{font-size:13px;font-weight:400;color:var(--muted);letter-spacing:0}
+.yi rt{color:var(--accent);font-weight:700}
+.tag{font-size:14px;color:var(--muted);margin-top:6px}
+.who{font-size:12px;color:var(--muted);margin:2px 0 0}
+.center{text-align:center}
+/* dialogs */
+.dlg{background:var(--card);border-radius:18px;box-shadow:var(--shadow);width:min(720px,100%);padding:20px;position:relative;max-height:92vh;overflow:auto}
+.dlg h2{margin:0 0 12px;font-size:20px}
+.dlg h3{margin:18px 0 8px;font-size:16px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;font-size:14px}
+.field input,.field select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.note{font-size:13px;color:var(--muted)}
+.edit-stage{position:relative;width:fit-content;max-width:100%;margin:0 auto;cursor:crosshair;touch-action:none}
+.edit-stage img{display:block;max-width:100%;max-height:55vh;pointer-events:none}
+.ebox{position:absolute;border:2px solid var(--blue);background:rgba(47,111,214,.12);border-radius:6px;pointer-events:none}
+.ebox b{position:absolute;left:-2px;top:-2px;background:var(--blue);color:#fff;font-size:12px;padding:0 6px;border-radius:6px 0 6px 0}
+.items{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.item{display:grid;grid-template-columns:28px 1fr 2fr 36px;gap:6px;align-items:center}
+.item input{font:inherit;padding:7px 9px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-width:0}
+.num{background:var(--blue);color:#fff;border-radius:8px;text-align:center;font-size:13px;padding:3px 0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:15px;z-index:80;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
+.busy{display:none;position:fixed;inset:0;background:rgba(20,15,10,.5);z-index:70;align-items:center;justify-content:center;color:#fff;font-size:18px;text-align:center;padding:20px}
+.busy.show{display:flex}
+@media (max-width:560px){
+  h1{font-size:26px}
+  .q .txt{font-size:24px}
+  .ans .txt{font-size:22px}
+  .item{grid-template-columns:24px 1fr 36px}
+  .item .a{grid-column:2/3}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="title">怎麼賣<span>？</span></h1>
+    <div class="seg" role="group" aria-label="字體">
+      <button id="bTrad" class="on">繁體</button><button id="bSimp">简体</button>
+    </div>
+  </header>
+  <p class="hint" id="hint"></p>
+  <div class="bar">
+    <div class="nav">
+      <button class="btn" id="prev">◀</button>
+      <span class="count" id="count">– / –</span>
+      <button class="btn primary big" id="next">下一頁 ▶</button>
+    </div>
+    <div class="tools">
+      <button class="btn small" id="bUpload">⬆️ <span>上傳圖片</span></button>
+      <button class="btn small" id="bEdit">✏️ <span>編輯</span></button>
+      <button class="btn small" id="bDel">🗑️ <span>刪除此頁</span></button>
+      <button class="btn small" id="bSet" title="設定">⚙️</button>
+    </div>
+  </div>
+  <div class="stage-card"><div class="stage" id="stage"><div class="empty">載入中…</div></div></div>
+  <input type="file" id="file" accept="image/*" multiple hidden>
+</div>
+<footer>Shelleytaiwan製作 2026請勿商用</footer>
+
+<!-- 問價彈窗 -->
+<div class="overlay" id="ovPop">
+  <div class="pop" role="dialog" aria-modal="true">
+    <button class="x" data-close>×</button>
+    <p class="pname" id="pName"></p>
+    <div class="q"><div class="txt" id="qTxt"></div><button class="spk" id="qSpk" title="再聽一次">🔊</button></div>
+    <div class="center"><button class="btn primary big" id="bAns">回答</button></div>
+    <div class="ans" id="ans">
+      <div class="row"><div class="txt" id="aTxt"></div><button class="spk" id="aSpk" title="再聽一次">🔊</button></div>
+      <div class="tag" id="aTag"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 設定 -->
+<div class="overlay" id="ovSet">
+  <div class="dlg">
+    <button class="x" data-close>×</button>
+    <h2>⚙️ 設定</h2>
+    <h3>聲音</h3>
+    <div class="field"><label>問題（男聲）</label><select id="vMale"></select></div>
+    <div class="field"><label>回答（女聲）</label><select id="vFemale"></select></div>
+    <div class="field"><label>語速 <span id="rateV"></span></label><input type="range" id="rate" min="0.5" max="1.2" step="0.05"></div>
+    <button class="btn small" id="vTest">🔊 試聽</button>
+    <p class="note">「自動」會依序找：男聲 雲揚 Yunyang／雲希／康康／志偉／Li-mu／Eddy…；女聲 繁體 美佳 Meijia、簡體 婷婷 Tingting…。每台機器的聲音不同，可在這裡手動挑。</p>
+    <h3>老師用：上傳後自動辨識、存到 GitHub</h3>
+    <div class="field"><label>Claude API 金鑰（辨識圖片用）</label><input id="kClaude" type="password" autocomplete="off" placeholder="sk-ant-…"></div>
+    <div class="field"><label>GitHub Token（fine-grained，只開這個倉庫的 Contents 讀寫）</label><input id="kGh" type="password" autocomplete="off" placeholder="github_pat_…"></div>
+    <div class="field"><label>倉庫 / 分支</label><input id="kRepo" placeholder="shelleytaiwan/how-do-you-sell"><input id="kBranch" placeholder="main"></div>
+    <p class="note">金鑰只存在這個瀏覽器裡。沒有 Claude 金鑰：上傳後要自己框選商品、輸入價錢。沒有 GitHub Token：新圖片和刪除只在這台電腦有效，學生看不到。</p>
+    <div class="center" style="margin-top:12px"><button class="btn primary" id="sSave">儲存設定</button></div>
+  </div>
+</div>
+
+<!-- 編輯 -->
+<div class="overlay" id="ovEdit">
+  <div class="dlg">
+    <button class="x" data-close>×</button>
+    <h2 id="eTitle">✏️ 編輯這一頁</h2>
+    <p class="note">在圖上拖曳可新增一個商品區塊。價錢寫法：<b>1斤3.98</b>、<b>2件150</b>、<b>100克27</b>，多個用「，」分開；其他說法直接打中文（例如：一盅兩件，十五塊九）。</p>
+    <div class="edit-stage" id="eStage"></div>
+    <div class="items" id="eItems"></div>
+    <div class="center" style="margin-top:14px;display:flex;gap:8px;justify-content:center">
+      <button class="btn" id="eAi">🤖 重新自動辨識</button>
+      <button class="btn primary" id="eSave">儲存</button>
+    </div>
+  </div>
+</div>
+
+<div class="busy" id="busy"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem('hdys_'+k); return v==null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('hdys_'+k, JSON.stringify(v)); }catch(e){} }
+};
+const FOLDER = { trad:'怎么卖/繁体/', simp:'怎么卖/簡體/' };
+const DEF_REPO = 'shelleytaiwan/how-do-you-sell';
+
+/* ---------- 文字 ---------- */
+const UI = {
+  trad:{ title:'怎麼賣', q:'怎麼賣？', hint:'點圖片上的商品，聽聽怎麼問價錢；按「回答」聽老闆怎麼說。', next:'下一頁 ▶', up:'上傳圖片', edit:'編輯', del:'刪除此頁', ans:'回答', empty:'這裡還沒有圖片，按「上傳圖片」加一張吧。', del_q:'確定要刪除這一頁嗎？刪除後就不能復原。', wrap:'已經是最後一頁，從第一頁重新開始。', price:'價格', male:'男聲', female:'女聲' },
+  simp:{ title:'怎么卖', q:'怎么卖？', hint:'点图片上的商品，听听怎么问价钱；按“回答”听老板怎么说。', next:'下一页 ▶', up:'上传图片', edit:'编辑', del:'删除此页', ans:'回答', empty:'这里还没有图片，按“上传图片”加一张吧。', del_q:'确定要删除这一页吗？删除后就不能恢复。', wrap:'已经是最后一页，从第一页重新开始。', price:'价格', male:'男声', female:'女声' }
+};
+const T2S = {'兩':'两','塊':'块','個':'个','條':'条','萬':'万','億':'亿','雙':'双','組':'组','張':'张','點':'点','盤':'盘','罐':'罐','顆':'颗','魚':'鱼','錢':'钱','麼':'么','賣':'卖'};
+const toS = s => s.replace(/[一-鿿]/g, c => T2S[c] || c);
+const S2T = Object.fromEntries(Object.entries(T2S).map(([a,b]) => [b,a]));
+const toT = s => s.replace(/[一-鿿]/g, c => S2T[c] || c);
+
+/* ---------- 數字 → 中文說法 ---------- */
+const D = '零一二三四五六七八九';
+function under1e4(n, liang){
+  const th=Math.floor(n/1000), h=Math.floor(n/100)%10, t=Math.floor(n/10)%10, o=n%10;
+  let s='', zero=false;
+  const unit=(d,u,first)=>{ if(d){ if(zero){s+='零';zero=false;} s+=(d===2&&liang&&first&&u!=='十')?'兩':D[d]; s+=u; } else if(s) zero=true; };
+  unit(th,'千',true); unit(h,'百',true);
+  if(t){ if(zero){s+='零';zero=false;} s+=(t===1&&!s)?'十':D[t]+'十'; } else if(s) zero=true;
+  if(o){ if(zero) s+='零'; s+=D[o]; }
+  return s;
+}
+function cnNum(n, liang=true){
+  n=Math.round(n);
+  if(n===0) return '零';
+  if(n===2 && liang) return '兩';
+  if(n>=1e8){ const hi=Math.floor(n/1e8), lo=n%1e8; return cnNum(hi,liang)+'億'+(lo?(lo<1e7?'零':'')+cnNum(lo,false):''); }
+  if(n>=1e4){ const hi=Math.floor(n/1e4), lo=n%1e4; return cnNum(hi,liang)+'萬'+(lo?(lo<1000?'零':'')+under1e4(lo,true):''); }
+  return under1e4(n, liang);
+}
+function cnPrice(p){
+  const cents=Math.round(p*100), y=Math.floor(cents/100), j=Math.floor(cents/10)%10, f=cents%10;
+  if(!y){ // 幾毛幾
+    if(!j) return D[f]+'分';
+    return (j===2?'兩':D[j])+'毛'+(f?D[f]:'');
+  }
+  let s=cnNum(y)+'塊';
+  if(j && f) s+=D[j]+'毛'+D[f];
+  else if(j) s+=D[j];
+  else if(f) s+='零'+D[f]+'分';
+  return s;
+}
+const fmtP = p => (Math.round(p*100)/100).toString();
+function spoken(a){ return a.say ? toT(a.say) : cnNum(a.q)+a.u+cnPrice(a.p); }
+function answerText(item, sc){
+  const s=item.a.map(spoken).join('，');
+  return sc==='simp'? toS(s) : s;
+}
+function tagText(item, sc){
+  const parts=item.a.map(a => a.say ? (a.d||a.say) : `${a.q}${a.u} ${fmtP(a.p)}元`);
+  const s=parts.join('　｜　');
+  return sc==='simp'? toS(s) : toT(s);
+}
+
+/* ---------- 拼音（含「一」變調） ---------- */
+const MARK={a:'āáǎàa',o:'ōóǒòo',e:'ēéěèe',i:'īíǐìi',u:'ūúǔùu',v:'ǖǘǚǜü'};
+function numToMark(py){
+  const m=py.match(/^([a-zü:]+?)([0-5])?$/i); if(!m) return py;
+  let s=m[1].replace(/u:|v/g,'v'), t=+(m[2]||5); if(t===5||t===0) return s.replace(/v/g,'ü');
+  let idx = s.search(/[ae]/); if(idx<0) idx = s.indexOf('ou');
+  if(idx<0){ for(let k=s.length-1;k>=0;k--){ if('aeiouv'.includes(s[k])){ idx=k; break; } } }
+  if(idx<0) return s;
+  const c=s[idx]; return (s.slice(0,idx)+MARK[c][t-1]+s.slice(idx+1)).replace(/v/g,'ü');
+}
+const NUMCTX = '十百千萬万億亿零第';
+function pinyinList(text){
+  const chars=[...text];
+  if(!window.pinyinPro) return chars.map(()=>null);
+  const zh=chars.filter(c=>/[一-鿿]/.test(c)).join('');
+  let arr;
+  try{ arr=pinyinPro.pinyin(zh,{type:'array',toneType:'num',toneSandhi:false}); }catch(e){ return chars.map(()=>null); }
+  const out=[]; let k=0;
+  for(const ch of chars) out.push(/[一-鿿]/.test(ch) ? (arr[k++]||null) : null);
+  chars.forEach((ch,i)=>{ if((ch==='麼'||ch==='么') && chars[i-1]==='怎') out[i]='me5'; });
+  // 「一」變調
+  chars.forEach((ch,i)=>{
+    if(ch!=='一') return;
+    const prev=chars[i-1]||'', next=out[i+1];
+    let t=1;
+    if(!(prev && NUMCTX.includes(prev)) && next && /[1-4]$/.test(next)) t = next.endsWith('4') ? 2 : 4;
+    out[i]='yi'+t;
+  });
+  return out.map(p => p ? numToMark(p) : null);
+}
+function rubyHTML(text){
+  const chars=[...text], py=pinyinList(text);
+  return chars.map((c,i)=> py[i] ? `<ruby${c==='一'?' class="yi"':''}>${c}<rt>${py[i]}</rt></ruby>` : esc(c)).join('');
+}
+const esc = s => String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- 語音 ---------- */
+let voices=[];
+const MALE_REAL=/yunyang|雲揚|云扬|yunxi|雲希|云希|yunjian|雲健|云健|yunjhe|雲哲|云哲|yunze|kangkang|康康|zhiwei|志偉|志伟|li-?mu|binbin|bin-bin|彬彬|lisheng|理生|\bmale\b|男/i;
+const MALE_FUN=/eddy|reed|rock?k?o|rocco|grandpa/i;
+const MALE={test:n=>MALE_REAL.test(n)||MALE_FUN.test(n)};
+const FEMALE_TW=/meijia|美佳|hsiaochen|曉臻|hsiaoyu|曉雨|hanhan|yating|雅婷/i;
+const FEMALE_CN=/tingting|婷婷|xiaoxiao|曉曉|晓晓|huihui|慧慧|yaoyao|瑶瑶|xiaoyi|晓伊|yu-?shu/i;
+const isFemaleName = v => /female|女/i.test(v.name) || FEMALE_TW.test(v.name) || FEMALE_CN.test(v.name);
+function loadVoices(){ voices=(window.speechSynthesis?speechSynthesis.getVoices():[]).filter(v=>/^(zh|cmn|yue)/i.test(v.lang)); fillVoiceSelects(); }
+if(window.speechSynthesis){ loadVoices(); speechSynthesis.onvoiceschanged=loadVoices; }
+const langOf = sc => sc==='trad' ? /zh[-_]TW|zh[-_]Hant|cmn[-_]Hant/i : /zh[-_]CN|zh[-_]Hans|cmn[-_]Hans|cmn[-_]CN/i;
+function pickVoice(role, sc){
+  const pref=LS.get('voice_'+role,'');
+  if(pref){ const v=voices.find(v=>v.voiceURI===pref); if(v) return v; }
+  const L=langOf(sc), notHK=v=>!/HK|yue/i.test(v.lang);
+  if(role==='male'){
+    const m=voices.filter(v=>MALE.test(v.name) && !/female/i.test(v.name) && notHK(v));
+    const rank=v=>(/yunyang|雲揚|云扬/i.test(v.name)?0:MALE_REAL.test(v.name)?1:3)+(L.test(v.lang)?0:1)-(/online|natural|增強|增强|高音質|enhanced|premium/i.test(v.name)?0.3:0);
+    m.sort((a,b)=>rank(a)-rank(b));
+    if(m[0]) return m[0];
+  } else {
+    const F= sc==='trad'?FEMALE_TW:FEMALE_CN;
+    const f=voices.find(v=>F.test(v.name)) || voices.find(v=>L.test(v.lang) && !MALE.test(v.name)) || voices.find(v=>isFemaleName(v));
+    if(f) return f;
+  }
+  return voices.find(v=>L.test(v.lang)) || voices.find(notHK) || null;
+}
+function speak(text, role){
+  if(!window.speechSynthesis){ toast('這個瀏覽器不支援語音'); return; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(role, state.sc);
+  u.lang = v ? v.lang : (state.sc==='trad'?'zh-TW':'zh-CN');
+  if(v) u.voice=v;
+  u.rate=LS.get('rate',0.85);
+  // 找不到男聲時，壓低音調當男聲
+  if(role==='male' && (!v || !MALE.test(v.name) || /female/i.test(v.name))) u.pitch=0.6;
+  speechSynthesis.speak(u);
+}
+function fillVoiceSelects(){
+  for(const [id,role] of [['vMale','male'],['vFemale','female']]){
+    const sel=$(id); if(!sel) continue;
+    const cur=LS.get('voice_'+role,'');
+    sel.innerHTML='<option value="">自動</option>'+voices.map(v=>`<option value="${esc(v.voiceURI)}"${v.voiceURI===cur?' selected':''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('');
+  }
+}
+
+/* ---------- 本機儲存（IndexedDB） ---------- */
+const idb = (() => {
+  let p=null;
+  const open=()=> p || (p=new Promise((res,rej)=>{ const r=indexedDB.open('hdys',1); r.onupgradeneeded=()=>r.result.createObjectStore('pages',{keyPath:'id'}); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }));
+  const tx=async(mode,fn)=>{ try{ const db=await open(); return await new Promise((res,rej)=>{ const t=db.transaction('pages',mode); const s=t.objectStore('pages'); const r=fn(s); t.oncomplete=()=>res(r&&r.result); t.onerror=()=>rej(t.error); }); }catch(e){ return null; } };
+  return { all:()=>tx('readonly',s=>s.getAll()), put:v=>tx('readwrite',s=>s.put(v)), del:id=>tx('readwrite',s=>s.delete(id)) };
+})();
+
+/* ---------- 狀態 ---------- */
+const state = { sc: LS.get('sc','trad'), data:{trad:[],simp:[]}, local:[], pages:[], idx:0, cur:null };
+
+async function loadData(){
+  try{
+    const r=await fetch('data.json?t='+Date.now(),{cache:'no-store'});
+    if(r.ok) state.data=await r.json();
+  }catch(e){}
+  state.local=(await idb.all())||[];
+  // 已經同步到 GitHub、且雲端已出現的本機暫存，清掉
+  const remoteIds=new Set([...state.data.trad,...state.data.simp].map(p=>p.id));
+  for(const p of state.local){ if(p.synced && remoteIds.has(p.id)){ idb.del(p.id); } }
+  state.local=state.local.filter(p=>!(p.synced && remoteIds.has(p.id)));
+}
+function buildPages(){
+  const sc=state.sc, hidden=new Set(LS.get('hidden',[])), edits=LS.get('edits',{});
+  const remote=(state.data[sc]||[]).filter(p=>!hidden.has(p.id)).map(p=> edits[p.id] ? {...p, items:edits[p.id]} : p);
+  const ids=new Set(remote.map(p=>p.id));
+  const locals=state.local.filter(p=>p.sc===sc && !ids.has(p.id) && !hidden.has(p.id)).sort((a,b)=>a.created-b.created);
+  state.pages=[...remote, ...locals];
+}
+function savePos(){
+  const pos=LS.get('pos',{}); const p=state.pages[state.idx];
+  pos[state.sc]={id:p?p.id:null, idx:state.idx}; LS.set('pos',pos); LS.set('sc',state.sc);
+}
+function restorePos(){
+  const pos=(LS.get('pos',{}))[state.sc];
+  let i=0;
+  if(pos){ const f=state.pages.findIndex(p=>p.id===pos.id); i = f>=0 ? f : Math.min(pos.idx||0, Math.max(0,state.pages.length-1)); }
+  state.idx=i;
+}
+function repoInfo(){ return { repo:LS.get('repo','')||DEF_REPO, branch:LS.get('branch','')||'main', token:LS.get('gh',''), claude:LS.get('claude','') }; }
+function imgSrc(p){
+  if(p.dataUrl) return p.dataUrl;
+  return p.img.split('/').map(encodeURIComponent).join('/');
+}
+
+/* ---------- 畫面 ---------- */
+function applyUI(){
+  const u=UI[state.sc];
+  document.documentElement.lang = state.sc==='trad'?'zh-Hant':'zh-Hans';
+  document.title=u.title+'？';
+  $('title').innerHTML=esc(u.title)+'<span>？</span>';
+  $('hint').textContent=u.hint;
+  $('next').textContent=u.next;
+  $('bUpload').querySelector('span').textContent=u.up;
+  $('bEdit').querySelector('span').textContent=u.edit;
+  $('bDel').querySelector('span').textContent=u.del;
+  $('bAns').textContent=u.ans;
+  $('bTrad').classList.toggle('on',state.sc==='trad');
+  $('bSimp').classList.toggle('on',state.sc==='simp');
+}
+function render(){
+  applyUI();
+  const st=$('stage'), n=state.pages.length;
+  $('count').textContent = n ? `${state.idx+1} / ${n}` : '0 / 0';
+  $('prev').disabled = n<2; $('next').disabled = n<2;
+  $('bEdit').disabled = !n; $('bDel').disabled = !n;
+  if(!n){ st.innerHTML=`<div class="empty">${esc(UI[state.sc].empty)}</div>`; return; }
+  const p=state.pages[state.idx];
+  st.innerHTML='';
+  const img=new Image(); img.alt=''; img.draggable=false;
+  img.src=imgSrc(p);
+  img.onerror=()=>{ // GitHub Pages 還沒更新時，改從 raw 讀
+    if(img.dataset.fb) return; img.dataset.fb=1;
+    const {repo,branch}=repoInfo();
+    img.src=`https://raw.githubusercontent.com/${repo}/${branch}/`+p.img.split('/').map(encodeURIComponent).join('/');
+  };
+  st.appendChild(img);
+  p.items.forEach((it,i)=>{
+    const b=document.createElement('button');
+    const [x,y,w,h]=it.b;
+    b.className='hot'+(p.items.length===1 && w>=95 && h>=95 ? ' whole':'');
+    Object.assign(b.style,{left:x+'%',top:y+'%',width:w+'%',height:h+'%'});
+    b.setAttribute('aria-label',it.n);
+    b.onclick=()=>openPop(it);
+    st.appendChild(b);
+  });
+  savePos();
+}
+function go(d){
+  const n=state.pages.length; if(!n) return;
+  let i=state.idx+d;
+  if(i>=n){ i=0; toast(UI[state.sc].wrap); }
+  if(i<0) i=n-1;
+  state.idx=i; closeAll(); render(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function setScript(sc){
+  if(sc===state.sc) return;
+  savePos(); state.sc=sc; LS.set('sc',sc);
+  buildPages(); restorePos(); render();
+}
+
+/* ---------- 問價彈窗 ---------- */
+function openPop(it){
+  const sc=state.sc, name= sc==='simp'? toS(it.n) : it.n;
+  state.cur=it;
+  const q=name+UI[sc].q;
+  $('pName').textContent='';
+  $('qTxt').innerHTML=rubyHTML(q);
+  $('ans').classList.remove('show');
+  $('bAns').style.display='';
+  $('ovPop').classList.add('show');
+  speak(q,'male');
+}
+function showAnswer(){
+  const it=state.cur, sc=state.sc; if(!it) return;
+  const a=answerText(it,sc);
+  $('aTxt').innerHTML=rubyHTML(a);
+  $('aTag').textContent=UI[sc].price+'：'+tagText(it,sc);
+  $('ans').classList.add('show');
+  $('bAns').style.display='none';
+  speak(a,'female');
+}
+$('qSpk').onclick=()=>{ const it=state.cur; if(!it) return; speak((state.sc==='simp'?toS(it.n):it.n)+UI[state.sc].q,'male'); };
+$('aSpk').onclick=()=>{ if(state.cur) speak(answerText(state.cur,state.sc),'female'); };
+$('bAns').onclick=showAnswer;
+
+/* ---------- 共用 ---------- */
+function closeAll(){ document.querySelectorAll('.overlay.show').forEach(o=>o.classList.remove('show')); if(window.speechSynthesis) speechSynthesis.cancel(); }
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{ if(e.target===o || e.target.hasAttribute('data-close')) closeAll(); });
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeAll();
+  if(document.querySelector('.overlay.show') || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  if(e.key==='ArrowRight') go(1);
+  if(e.key==='ArrowLeft') go(-1);
+});
+let tt; function toast(m,ms=2600){ const t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),ms); }
+function busy(m){ const b=$('busy'); if(m){ b.textContent=m; b.classList.add('show'); } else b.classList.remove('show'); }
+$('prev').onclick=()=>go(-1);
+$('next').onclick=()=>go(1);
+$('bTrad').onclick=()=>setScript('trad');
+$('bSimp').onclick=()=>setScript('simp');
+
+/* ---------- 設定 ---------- */
+$('bSet').onclick=()=>{
+  fillVoiceSelects();
+  $('kClaude').value=LS.get('claude',''); $('kGh').value=LS.get('gh','');
+  $('kRepo').value=LS.get('repo','')||DEF_REPO; $('kBranch').value=LS.get('branch','')||'main';
+  $('rate').value=LS.get('rate',0.85); $('rateV').textContent=$('rate').value;
+  $('ovSet').classList.add('show');
+};
+$('rate').oninput=()=>{ $('rateV').textContent=$('rate').value; LS.set('rate',+$('rate').value); };
+$('vMale').onchange=()=>LS.set('voice_male',$('vMale').value);
+$('vFemale').onchange=()=>LS.set('voice_female',$('vFemale').value);
+$('vTest').onclick=()=>{
+  const q=state.sc==='trad'?'衣服怎麼賣？':'衣服怎么卖？', a=state.sc==='trad'?'一件一百塊，兩件一百五十塊。':'一件一百块，两件一百五十块。';
+  speak(q,'male');
+  const iv=setInterval(()=>{ if(!speechSynthesis.speaking){ clearInterval(iv); speak(a,'female'); } },300);
+};
+$('sSave').onclick=()=>{
+  LS.set('claude',$('kClaude').value.trim()); LS.set('gh',$('kGh').value.trim());
+  LS.set('repo',$('kRepo').value.trim()); LS.set('branch',$('kBranch').value.trim());
+  closeAll(); toast('已儲存');
+};
+
+/* ---------- 圖片處理 ---------- */
+function fileToJpeg(file, max=1600){
+  return new Promise((res,rej)=>{
+    const url=URL.createObjectURL(file), im=new Image();
+    im.onload=()=>{
+      const s=Math.min(1, max/Math.max(im.naturalWidth,im.naturalHeight));
+      const c=document.createElement('canvas'); c.width=Math.round(im.naturalWidth*s); c.height=Math.round(im.naturalHeight*s);
+      const g=c.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height); g.drawImage(im,0,0,c.width,c.height);
+      URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg',0.86));
+    };
+    im.onerror=()=>{ URL.revokeObjectURL(url); rej(new Error('圖片讀不到')); };
+    im.src=url;
+  });
+}
+async function urlToDataUrl(src){
+  const r=await fetch(src); const b=await r.blob();
+  return await fileToJpeg(b);
+}
+
+/* ---------- AI 辨識 ---------- */
+function aiPrompt(sc){
+  const zh = sc==='trad' ? '繁體中文（台灣用字）' : '简体中文';
+  return `這是一張商品／超市傳單／價目圖片，要給學中文的外國學生練習「〇〇怎麼賣？」。
+請找出圖中每一個「有標價」的商品，輸出 JSON（只輸出 JSON，不要其他文字）：
+{"items":[{"n":"商品名","b":[x,y,w,h],"a":[{"q":1,"u":"斤","p":3.98}]}]}
+規則：
+1. n 用${zh}，用最簡單的大類詞，最好 2～3 個字、最多 4 個字（例：衣服、褲子、裙子、雞腿、雞蛋、空調、蘋果、豬肉、牛肉、魚、蘑菇、葡萄、牛奶、餅乾）。不要品牌、產地、規格。只有同一張圖裡出現相似商品時，才在前面加簡單修飾語區分（例：青葡萄／黑葡萄、銀色冰箱／黑色冰箱）。
+2. b 是該商品（含它的價格標籤）在圖中的位置，用圖片寬高的百分比 0～100：左上角 x、y，寬 w、高 h。只有一個商品時用 [0,0,100,100]。區塊不要互相重疊。
+3. a 是價錢：q 數量（數字）、u 量詞或單位（${sc==='trad'?'件、條、雙、個、粒、斤、公斤、克、盒、包、袋、瓶、罐、杯、台、支、束、朵、組、份':'件、条、双、个、粒、斤、公斤、克、盒、包、袋、瓶、罐、杯、台、支、束、朵、组、份'}，選最自然的）、p 價錢（數字，用圖上的金額，不要貨幣符號）。
+   - 「每100g」寫成 {"q":100,"u":"克","p":價錢}。
+   - 有組合價就多寫幾筆，例如「59元1件、100元2件」→ [{"q":1,"u":"件","p":59},{"q":2,"u":"件","p":100}]；「買一送一 單瓶24元」→ [{"q":1,"u":"瓶","p":24},{"q":2,"u":"瓶","p":24}]。
+   - 用特價／實際售價，不用原價。熱量、尺寸、重量、日期不是價錢，不要當成價錢。
+   - 真的無法用「數量+量詞+價錢」表達時，可改寫成 {"say":"一盅兩件，十五塊九"}。
+4. 沒有任何標價的圖，回傳 {"items":[]}。`;
+}
+async function recognize(dataUrl, sc){
+  const {claude}=repoInfo(); if(!claude) return null;
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'content-type':'application/json','x-api-key':claude,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({ model:'claude-sonnet-5-5', max_tokens:4000,
+      messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:'image/jpeg',data:dataUrl.split(',')[1]}},
+        {type:'text',text:aiPrompt(sc)} ]}] })
+  });
+  if(!r.ok){ const t=await r.text(); throw new Error('AI 辨識失敗：'+r.status+' '+t.slice(0,160)); }
+  const j=await r.json();
+  const txt=(j.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('');
+  const m=txt.match(/\{[\s\S]*\}/); if(!m) throw new Error('AI 回傳格式不對');
+  const items=(JSON.parse(m[0]).items||[]).filter(it=>it && it.n && Array.isArray(it.b) && Array.isArray(it.a) && it.a.length);
+  return items.map(it=>({ n: sc==='trad'?toT(String(it.n)):toS(String(it.n)), b: it.b.slice(0,4).map(v=>Math.max(0,Math.min(100,Math.round(+v||0)))), a: it.a }));
+}
+
+/* ---------- GitHub ---------- */
+const b64utf8 = s => { const bytes=new TextEncoder().encode(s); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin); };
+const utf8b64 = b => new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+async function gh(path, opt={}){
+  const {repo,branch,token}=repoInfo();
+  const url=`https://api.github.com/repos/${repo}/contents/${path.split('/').map(encodeURIComponent).join('/')}`+(opt.method?'':`?ref=${encodeURIComponent(branch)}&t=${Date.now()}`);
+  const r=await fetch(url,{ method:opt.method||'GET', headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}, body: opt.body?JSON.stringify({...opt.body, branch}):undefined });
+  if(!r.ok && !(opt.allow404 && r.status===404)){ throw new Error('GitHub '+r.status+'：'+(await r.text()).slice(0,160)); }
+  return r.status===404 ? null : r.json();
+}
+async function ghEditData(mutate, msg){
+  const cur=await gh('data.json');
+  const data=JSON.parse(utf8b64(cur.content));
+  mutate(data);
+  await gh('data.json',{method:'PUT',body:{message:msg, content:b64utf8(JSON.stringify(data,null,1)), sha:cur.sha}});
+  state.data=data;
+}
+const hasGh = () => !!repoInfo().token;
+
+/* ---------- 上傳 ---------- */
+$('bUpload').onclick=()=>$('file').click();
+$('file').onchange=async e=>{
+  const files=[...e.target.files]; e.target.value='';
+  if(!files.length) return;
+  const sc=state.sc; let lastId=null, needEdit=null;
+  try{
+    for(let i=0;i<files.length;i++){
+      busy(`處理第 ${i+1} / ${files.length} 張…`);
+      const dataUrl=await fileToJpeg(files[i]);
+      let items=null;
+      if(repoInfo().claude){ busy(`AI 辨識第 ${i+1} / ${files.length} 張…`); try{ items=await recognize(dataUrl, sc); }catch(err){ toast(err.message,5000); } }
+      const id='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+      const page={ id, sc, img: FOLDER[sc]+'up-'+id+'.jpg', items: items||[], created:Date.now() };
+      if(hasGh()){
+        busy(`存到 GitHub（${i+1} / ${files.length}）…`);
+        await gh(page.img,{method:'PUT',body:{message:'上傳圖片 '+page.img, content:dataUrl.split(',')[1]}});
+        await ghEditData(d=>{ (d[sc]=d[sc]||[]).push({id, img:page.img, items:page.items}); }, '新增頁面 '+id);
+        await idb.put({...page, dataUrl, synced:true}); // GitHub Pages 更新前先用本機圖
+      } else {
+        await idb.put({...page, dataUrl, synced:false});
+      }
+      lastId=id; if(!page.items.length) needEdit=id;
+    }
+    state.local=(await idb.all())||[];
+    buildPages();
+    const f=state.pages.findIndex(p=>p.id===(needEdit||lastId)); if(f>=0) state.idx=f;
+    render();
+    toast(hasGh() ? '已上傳到 GitHub，約 1～2 分鐘後學生就看得到' : '已存在這台電腦（沒有設定 GitHub，學生看不到）',4000);
+    if(needEdit) openEditor();
+  }catch(err){ toast(err.message,6000); }
+  busy();
+};
+
+/* ---------- 刪除 ---------- */
+$('bDel').onclick=async()=>{
+  const p=state.pages[state.idx]; if(!p) return;
+  if(!confirm(UI[state.sc].del_q)) return;
+  const sc=state.sc;
+  try{
+    const isLocalOnly = state.local.some(l=>l.id===p.id && !l.synced);
+    if(isLocalOnly){ await idb.del(p.id); }
+    else if(hasGh()){
+      busy('從 GitHub 刪除…');
+      await ghEditData(d=>{ d[sc]=(d[sc]||[]).filter(x=>x.id!==p.id); }, '刪除頁面 '+p.id);
+      try{ const f=await gh(p.img,{allow404:true}); if(f&&f.sha) await gh(p.img,{method:'DELETE',body:{message:'刪除圖片 '+p.img, sha:f.sha}}); }catch(e){}
+      await idb.del(p.id);
+      const h=LS.get('hidden',[]); h.push(p.id); LS.set('hidden',h); // 在 Pages 更新前先隱藏
+    } else {
+      const h=LS.get('hidden',[]); h.push(p.id); LS.set('hidden',h);
+      toast('只在這台電腦隱藏（沒有設定 GitHub）',4000);
+    }
+    state.local=(await idb.all())||[];
+    buildPages(); state.idx=Math.min(state.idx, Math.max(0,state.pages.length-1)); render();
+  }catch(err){ toast(err.message,6000); }
+  busy();
+};
+
+/* ---------- 編輯 ---------- */
+let ed=null;
+function aToText(a){ return a.map(x=> x.say ? x.say : `${x.q}${x.u}${fmtP(x.p)}`).join('，'); }
+function textToA(s){
+  return s.split(/[，,；;\n]+/).map(x=>x.trim()).filter(Boolean).map(x=>{
+    const m=x.match(/^(\d+)\s*([^\d\s.]+?)\s*(\d+(?:\.\d+)?)\s*(?:元|塊|块)?$/);
+    return m ? {q:+m[1],u:m[2],p:+m[3]} : {say:x};
+  });
+}
+function openEditor(){
+  const p=state.pages[state.idx]; if(!p) return;
+  ed={ page:p, items:p.items.map(it=>({n:it.n,b:[...it.b],t:aToText(it.a)})) };
+  const es=$('eStage'); es.innerHTML='';
+  const img=new Image(); img.src=$('stage').querySelector('img')?.src || imgSrc(p); es.appendChild(img);
+  drawEdit(); $('ovEdit').classList.add('show');
+}
+function drawEdit(){
+  const es=$('eStage'); es.querySelectorAll('.ebox').forEach(n=>n.remove());
+  ed.items.forEach((it,i)=>{ const d=document.createElement('div'); d.className='ebox'; const [x,y,w,h]=it.b; Object.assign(d.style,{left:x+'%',top:y+'%',width:w+'%',height:h+'%'}); d.innerHTML=`<b>${i+1}</b>`; es.appendChild(d); });
+  const L=$('eItems'); L.innerHTML='';
+  ed.items.forEach((it,i)=>{
+    const row=document.createElement('div'); row.className='item';
+    row.innerHTML=`<span class="num">${i+1}</span><input class="n" placeholder="商品名（例：衣服）" value="${esc(it.n)}"><input class="a" placeholder="價錢（例：1件100，2件150）" value="${esc(it.t)}"><button class="btn small" title="刪除">✕</button>`;
+    row.querySelector('.n').oninput=e=>it.n=e.target.value.trim();
+    row.querySelector('.a').oninput=e=>it.t=e.target.value;
+    row.querySelector('button').onclick=()=>{ ed.items.splice(i,1); drawEdit(); };
+    L.appendChild(row);
+  });
+  if(!ed.items.length) L.innerHTML='<p class="note">還沒有商品：在圖上拖曳框出一個商品（只有一個商品也可以直接框整張圖）。</p>';
+}
+(() => {
+  const es=$('eStage'); let start=null, box=null;
+  const pt=e=>{ const r=es.getBoundingClientRect(); return [Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100)), Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100))]; };
+  es.addEventListener('pointerdown',e=>{ if(!ed) return; start=pt(e); box=document.createElement('div'); box.className='ebox'; es.appendChild(box); es.setPointerCapture(e.pointerId); });
+  es.addEventListener('pointermove',e=>{ if(!start) return; const [x,y]=pt(e); Object.assign(box.style,{left:Math.min(x,start[0])+'%',top:Math.min(y,start[1])+'%',width:Math.abs(x-start[0])+'%',height:Math.abs(y-start[1])+'%'}); });
+  es.addEventListener('pointerup',e=>{ if(!start) return; const [x,y]=pt(e); const b=[Math.min(x,start[0]),Math.min(y,start[1]),Math.abs(x-start[0]),Math.abs(y-start[1])].map(v=>Math.round(v)); start=null; box.remove();
+    if(b[2]<3||b[3]<3) return; ed.items.push({n:'',b,t:''}); drawEdit(); const ins=$('eItems').querySelectorAll('.n'); ins[ins.length-1]?.focus(); });
+})();
+$('bEdit').onclick=openEditor;
+$('eAi').onclick=async()=>{
+  if(!repoInfo().claude){ toast('請先在 ⚙️ 設定裡填 Claude API 金鑰',4000); return; }
+  try{
+    busy('AI 辨識中…');
+    const src=ed.page.dataUrl || $('eStage').querySelector('img').src;
+    const items=await recognize(src.startsWith('data:')?src:await urlToDataUrl(src), state.sc);
+    ed.items=(items||[]).map(it=>({n:it.n,b:it.b,t:aToText(it.a)})); drawEdit();
+  }catch(err){ toast(err.message,6000); }
+  busy();
+};
+$('eSave').onclick=async()=>{
+  const items=ed.items.filter(it=>it.n && it.t.trim()).map(it=>({n:it.n,b:it.b,a:textToA(it.t)}));
+  const p=ed.page, sc=state.sc;
+  try{
+    const loc=state.local.find(l=>l.id===p.id);
+    if(loc && !loc.synced){ await idb.put({...loc, items}); }
+    else if(hasGh()){
+      busy('存到 GitHub…');
+      await ghEditData(d=>{ const x=(d[sc]||[]).find(x=>x.id===p.id); if(x) x.items=items; }, '修改頁面 '+p.id);
+      if(loc) await idb.put({...loc, items});
+      const e=LS.get('edits',{}); e[p.id]=items; LS.set('edits',e); // Pages 更新前先用本機版本
+    } else {
+      const e=LS.get('edits',{}); e[p.id]=items; LS.set('edits',e);
+      toast('只改在這台電腦（沒有設定 GitHub）',4000);
+    }
+    state.local=(await idb.all())||[];
+    buildPages(); closeAll(); render();
+  }catch(err){ toast(err.message,6000); }
+  busy();
+};
+
+/* ---------- 開始 ---------- */
+(async()=>{
+  applyUI();
+  await loadData();
+  // 雲端版本若已包含本機修改，就把本機修改清掉
+  const edits=LS.get('edits',{}), all=[...state.data.trad,...state.data.simp];
+  for(const id of Object.keys(edits)){ const r=all.find(p=>p.id===id); if(r && JSON.stringify(r.items)===JSON.stringify(edits[id])) delete edits[id]; }
+  LS.set('edits',edits);
+  buildPages(); restorePos(); render();
+})();
+})();
+</script>
+</body>
+</html>
